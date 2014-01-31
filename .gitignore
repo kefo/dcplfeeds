@@ -1,0 +1,13 @@
+
+nbproject/
+
+public_html/index.php
+safe/
+**.xml
+**.tcx
+notes.txt
+
+application/config/database.php
+application/config/config.php
+
+scripts/
