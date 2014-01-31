@@ -90,7 +90,7 @@ class Manage extends CI_Controller {
                 'type' => 'INT',
                 'constraint' => 11,
             ),
-            'sirsiID' => array(
+            'entryID' => array(
                 'type' =>'CHAR',
                 'constraint' => '40'
             ),
@@ -115,6 +115,26 @@ class Manage extends CI_Controller {
 		$this->load->view('templates/htmlfoot');
 	}
 	
+	
+	public function reset()
+	{
+	    $this->load->database();
+	    $this->load->dbforge();
+
+        $this->db->truncate("manage");
+        $this->db->truncate("data");
+        
+		$data['page_title'] = 'Reset DB';
+		$data['page_lead'] = 'Resetting time.';
+		
+		$data['reset'] = 1;
+                
+		$this->load->view('templates/htmlhead', $data);
+		$this->load->view('templates/reset', $data);
+		$this->load->view('templates/htmlfoot');
+	}
+	
 }
+
 
 ?>
