@@ -46,6 +46,10 @@ class Manage extends CI_Controller {
                 'unsigned' => TRUE,
                 'auto_increment' => TRUE
             ),
+            'manageFeedName' => array(
+                'type' =>'CHAR',
+                'constraint' => '20'
+            ),
             'manageRetrievalDate' => array(
                 'type' =>'DATE'
             ),
