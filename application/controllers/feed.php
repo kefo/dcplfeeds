@@ -189,8 +189,15 @@ class Feed extends CI_Controller {
             //exit;
 	    }
 
+        $manageIDs = array();
         $entries = array();
+        //$results = $query->result_array();
         foreach ($query->result_array() as $row) {
+            // This is for later.
+            if (!in_array($row["manageID"], $manageIDs)) {
+                array_push($manageIDs, $row["manageID"]);
+            }
+                    
             $obj = json_decode($row["data"], true);
 	        //echo "<pre>";
 	        //print_r($obj);
@@ -243,10 +250,31 @@ class Feed extends CI_Controller {
 	        //echo "</pre>";
         }
         
-        $body = implode($entries, "\n\n");
+        
+        $body = "No new entries found for $feedname. \n\n";
+        if ( count($entries) > 0 ) { 
+            $body = implode($entries, "\n\n");
+        }
+            
         echo "<pre>";
 	    print ($body);
 	    echo "</pre>";
+	    
+	    $to      = 'kford@3windmills.com';
+        $subject = 'DCPL Feed - ' . $feedname;
+        $message = $body;
+        $headers = 'From: feeds@3windmills.com' . "\r\n" .
+                'Reply-To: kford@3windmills.com';
+        $success = mail($to, $subject, $message, $headers);
+        //$success = true;
+        if ($success) {
+            // manageIDs was gathered above.
+            foreach ($manageIDs as $mID) {
+                $this->db->update('manage', array('manageStatus' => '2', 'manageEmailed' => '1'), array('manageID' => $mID));
+            }
+        } else {
+            echo "\n\nEmail failed.";
+        }
 	    
 	    // Need to email the results and 
 	    // then set manageEmail to 1
