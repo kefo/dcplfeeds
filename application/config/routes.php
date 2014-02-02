@@ -43,9 +43,12 @@ $route['manage/instantiate'] = "manage/instantiate";
 $route['manage/reset'] = "manage/reset";
 
 $route['feed/([a-zA-Z0-9\-]+)/retrieve'] = "feed/retrieve/$1";
+
 $route['feed/([a-zA-Z0-9\-]+)/process/([0-9]+)'] = "feed/process/$1/$2";
+$route['feed/([a-zA-Z0-9\-]+)/process'] = "feed/process/$1";
+
 $route['feed/([a-zA-Z0-9\-]+)/email/([0-9]+)'] = "feed/email/$1/$2";
-$route['retrieval/process/([0-9]+)'] = "retrieval/process/$1";
+$route['feed/([a-zA-Z0-9\-]+)/email'] = "feed/email/$1";
 
 $route['default_controller'] = "runs/redirect";
 $route['404_override'] = '';
