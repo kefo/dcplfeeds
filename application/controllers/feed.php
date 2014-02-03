@@ -15,6 +15,8 @@ class Feed extends CI_Controller {
 	    if ($feedname == "owls") {
 	        $feed = file_get_contents('https://catalog.dclibrary.org/client/rss/hitlist/dcpl/qu=owls&qf=SUBJECT%09Subject%09Owls+--+Fiction.%09Owls+--+Fiction.');
 	        //echo $feed;
+	    } else if ($feedname == "featurefilms") {
+	        $feed = file_get_contents('https://catalog.dclibrary.org/client/rss/hitlist/dcpl/qf=GENRE_TERM%09Genre%09Feature+films.%09Feature+films.&st=PD');
 	    }
 	    
 	    if ($feed) {
@@ -115,23 +117,23 @@ class Feed extends CI_Controller {
             //exit;
 	    }
 	    foreach ($query->result_array() as $row) {
-	        array_push($urisToProcess, $row["entryID"]);
+	        array_push($urisToProcess, array($row["manageID"], $row["entryID"]));
 	    }
 
         $processed = array();
 	    if ( count($urisToProcess) > 0 ) {
 	        foreach ($urisToProcess as $u) {
 	            //echo $u . "<br />";
-	            $uParts = explode(":", $u);
+	            $uParts = explode(":", $u[1]);
 	            $catKey = end($uParts);
 	            // echo $catKey . "<br />";
 	            //$d = file_get_contents("http://dcpl.sirsi.net/dcpl_symws/rest/standard/lookupTitleInfo?clientID=DS_CLIENT&titleID=" . $catKey . "&includeOPACInfo=false&marcEntryFilter=all&json=false&callback=?");
 	            $d = file_get_contents("http://dcpl.sirsi.net/dcpl_symws/rest/standard/lookupTitleInfo?clientID=DS_CLIENT&titleID=" . $catKey . "&includeOPACInfo=false&marcEntryFilter=all&json=true");
 	            if ($d) {
-	                $this->db->update('data', array('data' => $d), array('manageID' => $manageID, 'entryID' => $u));
-	                array_push($processed, "Retrieved: " . $u);
+	                $this->db->update('data', array('data' => $d), array('manageID' => $u[0], 'entryID' => $u[1]));
+	                array_push($processed, "Retrieved: " . $u[1]);
 	            } else {
-	                array_push($processed, "FAILED: " . $u);
+	                array_push($processed, "FAILED: " . $u[1]);
 	            }
 	            sleep(3);
 	        }
@@ -208,7 +210,7 @@ class Feed extends CI_Controller {
 	        $contributors = "";
 	        $pubdate = "";
 	        $description = "";
-	        $url = "https://catalog.dclibrary.org/client/en_US/dcpl/search/detailnonmodal?d=" . $row["entryID"] . "~ILS~0~72"; // ent%3A%2F%2FSD_ILS%2F278%2FSD_ILS%3A278478~ILS~0~72
+	        $url = "https://catalog.dclibrary.org/client/en_US/dcpl/search/detailnonmodal?d=" . $row["entryID"] . "~ILS~0~999"; // ent%3A%2F%2FSD_ILS%2F278%2FSD_ILS%3A278478~ILS~0~72
 	        foreach ($obj["TitleInfo"][0]["BibliographicInfo"]["MarcEntryInfo"] as $d) {
                 if (
                     $d["entryID"] == "100" ||
@@ -260,7 +262,7 @@ class Feed extends CI_Controller {
 	    print ($body);
 	    echo "</pre>";
 	    
-	    $to      = 'kford@3windmills.com';
+	    $to      = 'kford@3windmills.com, sford@3windmills.com';
         $subject = 'DCPL Feed - ' . $feedname;
         $message = $body;
         $headers = 'From: feeds@3windmills.com' . "\r\n" .
