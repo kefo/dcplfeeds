@@ -42,13 +42,13 @@
 $route['manage/instantiate'] = "manage/instantiate";
 $route['manage/reset'] = "manage/reset";
 
-$route['feed/([a-zA-Z0-9\-]+)/retrieve'] = "feed/retrieve/$1";
+$route['([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-]+)/retrieve'] = "$1/retrieve/$2";
 
-$route['feed/([a-zA-Z0-9\-]+)/process/([0-9]+)'] = "feed/process/$1/$2";
-$route['feed/([a-zA-Z0-9\-]+)/process'] = "feed/process/$1";
+$route['([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-]+)/process/([0-9]+)'] = "$1/process/$2/$3";
+$route['([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-]+)/process'] = "$1/process/$2";
 
-$route['feed/([a-zA-Z0-9\-]+)/email/([0-9]+)'] = "feed/email/$1/$2";
-$route['feed/([a-zA-Z0-9\-]+)/email'] = "feed/email/$1";
+$route['([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-]+)/email/([0-9]+)'] = "$1/email/$2/$3";
+$route['([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-]+)/email'] = "$1/email/$2";
 
 $route['default_controller'] = "runs/redirect";
 $route['404_override'] = '';
