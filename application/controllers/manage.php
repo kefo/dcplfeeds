@@ -96,7 +96,7 @@ class Manage extends CI_Controller {
             ),
             'entryID' => array(
                 'type' =>'CHAR',
-                'constraint' => '40'
+                'constraint' => '200'
             ),
             'data' => array(
                 'type' =>'TEXT',
