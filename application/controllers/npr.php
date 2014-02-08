@@ -184,7 +184,7 @@ class NPR extends CI_Controller {
         
         $body = "No new entries found for NPR: $feedname. \n\n";
         if ( count($entries) > 0 ) { 
-            $body = implode($entries, "\n\n");
+            $body = "Total number of new entries: " . count($entries) . "\n\n\n" . implode($entries, "\n\n\n");
         }
             
         echo "<pre>";
