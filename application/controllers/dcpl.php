@@ -1,13 +1,19 @@
 <?php
 
-class Feed extends CI_Controller {
+class DCPL extends CI_Controller {
 	
 	public function __construct()
 	{
 		parent::__construct();
 	}
 	
-	public function retrieve($feedname="") {
+	public function stemtostern($feedname) {
+	    $this->retrieve($feedname, false);
+	    $this->process($feedname, "", false);
+	    $this->email($feedname, "", false);
+	}
+	
+	public function retrieve($feedname="", $doview=true) {
 	    
 	    $this->load->database();
 	    
@@ -64,26 +70,28 @@ class Feed extends CI_Controller {
             
             $this->db->update('manage', array('manageNew' => count($addeduris)), array('manageID' => $manageID));
             
-            if (isset($_GET["serialize"]) && $_GET["serialize"] == "text") {
-                header("Content-type: text/plain");
-                echo "Retrieving Feed: " . $feedname . "\nFeed ID: " . $manageID . "\nTotal in feed: " . count($addeduris) . "\n\n";
-            } else {
-                $data['page_title'] = 'Retrieve feed: ' . $feedname;
-		        $data['page_lead'] = '';
-		        $data['html'] = '
-		            Feed: ' . $feedname . '<br />
-		            Feed ID: ' . $manageID . '<br />
-		            Total in feed: ' . count($addeduris) . '<br />
-		            ';
+            if ($doview) {
+                if (isset($_GET["serialize"]) && $_GET["serialize"] == "text") {
+                    header("Content-type: text/plain");
+                    echo "Retrieving Feed: " . $feedname . "\nFeed ID: " . $manageID . "\nTotal in feed: " . count($addeduris) . "\n\n";
+                } else {
+                    $data['page_title'] = 'Retrieve feed: ' . $feedname;
+		            $data['page_lead'] = '';
+    		        $data['html'] = '
+	    	            Feed: ' . $feedname . '<br />
+		                Feed ID: ' . $manageID . '<br />
+		                Total in feed: ' . count($addeduris) . '<br />
+		                ';
 		
-		        $this->load->view('templates/htmlhead', $data);
-		        $this->load->view('templates/basic_page', $data);
-		        $this->load->view('templates/htmlfoot');
+    		        $this->load->view('templates/htmlhead', $data);
+	    	        $this->load->view('templates/basic_page', $data);
+		            $this->load->view('templates/htmlfoot');
+                }
             }
 	    }
 	}
 	
-	public function process($feedname="", $manageID="") {
+	public function process($feedname="", $manageID="", $doview=true) {
 	    
 	    $this->load->database();
 
@@ -139,22 +147,24 @@ class Feed extends CI_Controller {
 	        }
 	    }
 	    
-	    if (isset($_GET["serialize"]) && $_GET["serialize"] == "text") {
-            header("Content-type: text/plain");
-            echo 'Processing feed: ' . $feedname . "\n\n" . implode($processed, "\n") . "\n\n";
-        } else {
-            $data['page_title'] = 'Processing feed: ' . $feedname;
-	        $data['page_lead'] = '';
-	        $data['html'] = implode($processed, "<br />");
-	        $this->load->view('templates/htmlhead', $data);
-        	$this->load->view('templates/basic_page', $data);
-	        $this->load->view('templates/htmlfoot');
+	    if ($doview) {
+	        if (isset($_GET["serialize"]) && $_GET["serialize"] == "text") {
+                header("Content-type: text/plain");
+                echo 'Processing feed: ' . $feedname . "\n\n" . implode($processed, "\n") . "\n\n";
+            } else {
+                $data['page_title'] = 'Processing feed: ' . $feedname;
+	            $data['page_lead'] = '';
+	            $data['html'] = implode($processed, "<br />");
+	            $this->load->view('templates/htmlhead', $data);
+        	    $this->load->view('templates/basic_page', $data);
+	            $this->load->view('templates/htmlfoot');
             }
+	    }
 	}
 	
 	
 	
-	public function email($feedname="", $manageID="") {
+	public function email($feedname="", $manageID="", $doview=true) {
 	    
 	    $this->load->database();
 
