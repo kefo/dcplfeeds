@@ -82,8 +82,9 @@ class NPR extends CI_Controller {
             
             $new = 0;
             foreach ($feeddata as $fd) {
-                $query = $this->db->get_where('data', array('manageID' => $manageID, 'entryID' => $fd["entryID"]), 1);
-                if ($query->num_rows() > 0) {
+                // Hopefully, ID's will be unique and based on the feed domain somehow.
+                $query = $this->db->get_where('data', array('entryID' => $fd["entryID"]));
+                if ($query->num_rows() == 0) {
                     $d = array(
                         'manageID' => $manageID,
                         'entryID' => $fd["entryID"],

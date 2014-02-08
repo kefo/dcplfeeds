@@ -58,7 +58,8 @@ class DCPL extends CI_Controller {
             $new = 0;
             $addeduris = array();
             foreach ($feeduris as $u) {
-                $query = $this->db->get_where('data', array('manageID' => $manageID, 'entryID' => $u), 1);
+                // Hopefully, ID's will be unique and based on the feed domain somehow.
+                $query = $this->db->get_where('data', array('entryID' => $fd["entryID"]));
                 if ($query->num_rows() == 0) {
                     $d = array(
                         'manageID' => $manageID,
