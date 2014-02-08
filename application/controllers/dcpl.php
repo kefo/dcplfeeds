@@ -55,6 +55,7 @@ class DCPL extends CI_Controller {
                 array_push($feeduris, $entry->nodeValue);
             }
             
+            $new = 0;
             $addeduris = array();
             foreach ($feeduris as $u) {
                 $query = $this->db->get_where('data', array('manageID' => $manageID, 'entryID' => $u), 1);
@@ -64,11 +65,15 @@ class DCPL extends CI_Controller {
                         'entryID' => $u
                     );
                     $this->db->insert('data', $d);
+                    $new++;
                     array_push($addeduris, $u);
                 }
             }
             
-            $this->db->update('manage', array('manageNew' => count($addeduris)), array('manageID' => $manageID));
+            $this->db->update('manage', array('manageNew' => $new), array('manageID' => $manageID));
+            if ($new == 0) {
+                $this->db->update('manage', array('manageStatus' => '2', 'manageEmailed' => '1'), array('manageID' => $manageID));
+            }
             
             if ($doview) {
                 if (isset($_GET["serialize"]) && $_GET["serialize"] == "text") {

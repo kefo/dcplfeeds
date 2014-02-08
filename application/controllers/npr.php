@@ -80,19 +80,24 @@ class NPR extends CI_Controller {
             //echo "</pre>";
             //exit;
             
+            $new = 0;
             foreach ($feeddata as $fd) {
                 $query = $this->db->get_where('data', array('manageID' => $manageID, 'entryID' => $fd["entryID"]), 1);
-                if ($query->num_rows() == 0) {
+                if ($query->num_rows() > 0) {
                     $d = array(
                         'manageID' => $manageID,
                         'entryID' => $fd["entryID"],
                         'data' => $fd["block"]
                     );
                     $this->db->insert('data', $d);
+                    $new++;
                 }
             }
             
-            $this->db->update('manage', array('manageNew' => count($feeddata)), array('manageID' => $manageID));
+            $this->db->update('manage', array('manageNew' => $new), array('manageID' => $manageID));
+            if ($new == 0) {
+                $this->db->update('manage', array('manageStatus' => '2', 'manageEmailed' => '1'), array('manageID' => $manageID));
+            }
             
             if ($doview) {
                 if (isset($_GET["serialize"]) && $_GET["serialize"] == "text") {
