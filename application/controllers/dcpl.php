@@ -1,5 +1,31 @@
 <?php
 
+/*
+
+Sirsi dynix API
+
+Assorted links, interesting but not fruitful.
+Some, however, are useful.
+
+Item info
+http://dcpl.sirsi.net/dcpl_symws/rest/standard/lookupTitleInfo?clientID=DS_CLIENT&titleID=882483&includeOPACInfo=false&marcEntryFilter=all&json=false&
+
+Catalog search
+http://dcpl.sirsi.net/dcpl_symws/rest/standard/searchCatalog?clientID=DS_CLIENT&itemtypeFilter=DVD&
+
+Search Policies (which fields are searchable)
+http://dcpl.sirsi.net/dcpl_symws/rest/admin/lookupPolicyList?clientID=DS_CLIENT&policyID=ALL_DCPL&policyType=CATLOOKUP
+
+Details about particulr search policy
+http://dcpl.sirsi.net/dcpl_symws/rest/admin/getPolicy?clientID=DS_CLIENT&policyID=GENERAL&policyType=CATLOOKUP
+
+Bonus, extra
+http://dcpl.sirsi.net/dcpl_symws/rest/admin/getSearchLibraryGroupPolicy?clientID=DS_CLIENT&policyID=ALL_DCPL
+
+See documents directory for Sirsi Manual, retrieved from
+https://shibsp.itc.virginia.edu/confluence/download/attachments/8916586/Symphony+Web+Services+3_1+SDK.pdf?version=1&modificationDate=1325557909000
+
+*/
 class DCPL extends CI_Controller {
 	
 	public function __construct()
